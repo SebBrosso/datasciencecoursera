@@ -6,7 +6,7 @@
 #   datasets: A vector containing the list of datasets to merge. Default is c("test", "train").
 #
 # Returns:
-#   The dataset
+#   The tidy dataset
 createDataset <- function(rootDir = "UCI HAR Dataset", datasets = c("test", "train")) {
   
   # variables to store merged datasets
@@ -58,8 +58,11 @@ createDataset <- function(rootDir = "UCI HAR Dataset", datasets = c("test", "tra
   #### 4. Appropriately labels the data set with descriptive variable names.
   colnames(result) <- tidyVariableLabels(colnames(result))
   
+  #### 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+  stats <- computeStats(result)
+  
   # return result
-  return(result)
+  return(stats)
 }
 
 # Formats and cleanup variable names extracted from feature.txt
@@ -101,7 +104,9 @@ tidyVariableLabels <- function(names) {
 #   The computed data frame
 computeStats <- function(data, output = NULL) {
 
-  #### 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+  if(!require(reshape)) {
+    stop("Failed to load required 'reshape' library")
+  }
   
   # Build pivot table
   

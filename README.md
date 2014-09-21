@@ -10,17 +10,17 @@ The *run_analysis* script needs to be run on the directory containing the "UCI H
 
 # Creating the tidy dataset
 
-Note: this corresponds to question 1 to 4
+Note: this corresponds to question 1 to 5
 
 Creating the tidy dataset is done by calling the *createDataset* function.
 
-This function creates a single dataset from "UCI HAR Dataset" by combining test and training data. In addition, it uses other files from the dataset to lookup for activity and feature names and correctly label the columns.
+This function creates a single dataset from "UCI HAR Dataset" by combining test and training data. In addition, it uses other files from the dataset to lookup for activity and feature names and correctly label the columns. Finally, it calls the `computeStats` function to aggregate variables on subject and activity.
 
 The default arguments for this function are set to work in the environment described in the Pre-requisites. Although, if you want to run the script in different conditions, you can use the following arguments:
 * rootDir: A string corresponding to the root directory of the dataset. Default is "UCI HAR Dataset".
 * datasets: A vector containing the list of datasets to merge. Default is c("test", "train").
 
-The `createDataset` function returns the resulting dataset (data frame).
+The `createDataset` function returns the resulting tidy dataset (data frame).
 
 Sample usage:
 ```R
@@ -31,7 +31,7 @@ Sample usage:
 
 # Computing the statistics dataset
 
-Note: this corresponds to question 5
+Note: this is an helper function which corresponds to question 5 alone and can be used to export tidy dataset to a file
 
 Creating the statistics dataset is done by calling the `computeStats` function.
 
@@ -41,7 +41,7 @@ It takes the following arguments:
 * data: A data frame created using createDataset
 * output: A string containing the name of the file to store data into. Default is NULL, meaning no file output
 
-The `computeStats` function returns the resulting dataset (data frame).
+The `computeStats` function returns the resulting tidy dataset (data frame).
 
 Sample usage:
 ```R
