@@ -2,7 +2,7 @@
 
 This document describes the how to use the R script *run_analysis.R* to generate the datasets of the project assignment for the Coursera Getting and Cleaning Data course.
 
-See [CookBook.md] for more information on the created datasets.
+See [CookBook](CookBook.md) for more information on the created datasets.
 
 # Pre-requisites
 

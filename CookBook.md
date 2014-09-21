@@ -5,7 +5,7 @@ This script is part of a project assignment done for the Getting and Cleaning Da
 
 ## Original data set
 
-The original data set was made available here: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
+The original data set was made available [here](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
 See the README.txt from the original dataset for a description of the features of the original data set. 
 
@@ -20,17 +20,18 @@ This is done by looping over the different datasets and concatenating the 3 data
 * *subjects*, read from the subject_{test|train}.txt files
 * *measures*, read from the X_{test|train}.txt files
 
-The concatenation of "test" and "train" datasets (activities, subjects and measures) is performed using *rbind*. As a result, we now have 3 data frames.
+The concatenation of "test" and "train" datasets (`activities`, `subjects` and `measures`) is performed using `rbind`. As a result, we now have 3 data frames.
 
-As we need to perform specific operations on *activities* and *measures* in the next steps, we choose not to build a single data frame yet and continue working on data frames seperately.
+As we need to perform specific operations on `activities` and `measures` in the next steps, we choose not to build a single data frame yet and continue working on data frames seperately.
 
 2. Extracting only the measurements on the mean and standard deviation for each measurement.
 
 We want to select only the features corresponding to mean and standard deviation measures.
-To do so, we work with the *measures* data frame and as a first step, we want to set the column labels based on the content of the file *features.txt* which lists all the features in the order in which they appear on the rows of *measures*.
+To do so, we work with the `measures` data frame and as a first step, we want to set the column labels based on the content of the file *features.txt* which lists all the features in the order in which they appear on the rows of `measures`.
 
-Once column names are set, the column names of *measures* look like:
+Once column names are set, the column names of `measures` look like:
 
+```
 tBodyAcc-mean()-X
 tBodyAcc-mean()-Y
 tBodyAcc-mean()-Z
@@ -41,26 +42,28 @@ tBodyAcc-mad()-X
 tBodyAcc-arCoeff()-X,2
 ...
 fBodyAcc-meanFreq()-X
+```
 
 Now we only want to keep the measures that are mean or standard deviation. To do so, we drop the data frame columns whose name does not contain "mean(" or "std" using *grepl*.
 Note that we need to match the opening parenthesis as we don't want the "meanFreq" which would match if we'd only selected "mean".
 
-At that point we still have 3 data frames (activities, subjects and measures). *measures* now only contains means and standard deviations and is labelled according to feature names from features.txt file. 
+At that point we still have 3 data frames (`activities`, `subjects` and `measures`). `measures` now only contains means and standard deviations and is labelled according to feature names from *features.txt* file. 
 
 3. Uses descriptive activity names to name the activities in the data set
 
-The *activities* data frame contains a list of identifiers corresponding to the type of activity identified for each record. The file *activity_labels.txt* associates labels to those identifiers. As such, we use *merge* to join *activities* and *activity_labels* based on their common id.
+The `activities` data frame contains a list of identifiers corresponding to the type of activity identified for each record. The file *activity_labels.txt* associates labels to those identifiers. As such, we use `merge` to join `activities` and `activity_labels` based on their common id.
 
 After the merge, we can drop the activity identifier which is no longer of any use as we now have the activity name.
 
-Now that all 3 data sets are clean and their columns correctly labelled, we combine them using *cbind* to build the result data frame.
+Now that all 3 data sets are clean and their columns correctly labelled, we combine them using `cbind` to build the result data frame.
 
 4. Appropriately labels the data set with descriptive variable names.
 
-The column names for the variables are still in the format from the *features.txt* file, such as "tBodyAcc-mean()-X". We want to make it a little bit more descriptive. We use several *gsub* on the column names to reformat them, turning "tBodyAcc-mean()-X" into "Body.Acc.mean.X".
+The column names for the variables are still in the format from the *features.txt* file, such as `tBodyAcc-mean()-X`. We want to make it a little bit more descriptive. We use several `gsub` on the column names to reformat them, turning `tBodyAcc-mean()-X` into `Body.Acc.mean.X`.
 
 After this step, the dataset has the following columns:
 
+```R
  $ subject.id                  : int  2 2 2 2 2 2 2 2 2 2 ...
  $ activity.name               : Factor w/ 6 levels "LAYING","SITTING",..: 3 3 3 3 3 3 3 3 3 3 ...
  $ Body.Acc.mean.X             : num  0.257 0.286 0.275 0.27 0.275 ...
@@ -129,10 +132,11 @@ After this step, the dataset has the following columns:
  $ Body.Body.Gyro.Mag.std      : num  -0.797 -0.917 -0.974 -0.971 -0.97 ...
  $ Body.Body.Gyro.Jerk.Mag.mean: num  -0.89 -0.952 -0.986 -0.986 -0.99 ...
  $ Body.Body.Gyro.Jerk.Mag.std : num  -0.907 -0.938 -0.983 -0.986 -0.991 ...
+```
 
 Where:
- * subject.id is the identifier of the subject of the experiment [1:30]
- * activity.name is the type of activity identified (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
+ * `subject.id` is the identifier of the subject of the experiment [1:30]
+ * `activity.name` is the type of activity identified (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
  * all other columns contain numerical measures from sensors normalized to [-1; 1]
 
 ## Statistics dataset
@@ -141,13 +145,13 @@ Next, we want to use the tidy dataset to build a compute some statistics on subj
 
 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-To answer this question, we create a pivot table so that we can use the data from the subject.id and activity.name columns as dimensions instead of measures.
+To answer this question, we create a pivot table so that we can use the data from the `subject.id` and `activity.name` columns as dimensions instead of measures.
 
-To build the pivot table and compute the aggregation, we rely on the *melt* and *cast* functions from the *reshape* library that must be installed.
+To build the pivot table and compute the aggregation, we rely on the `melt` and `cast` functions from the `reshape` library that must be installed.
 
-As we want to compute the average value of all variables for each combination of subject and activity, we use the combination of "subject.id" and "activity.name" as the unique identifier for the *melt* function and for the *cast* function.
+As we want to compute the average value of all variables for each combination of subject and activity, we use the combination of `subject.id` and `activity.name` as the unique identifier for the `melt` function and for the `cast` function.
 
-The *cast* function is applied with the *mean* function to compute the average of each variable.
+The `cast` function is applied with the `mean` function to compute the average of each variable.
 
 The statistics dataset has the same columns as the tidy dataset plus the attributes from the "cast data frame".
 
