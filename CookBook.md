@@ -13,7 +13,7 @@ See the README.txt from the original dataset for a description of the features o
 
 The goal of the first 4 steps of the project is to combine the different elements of the original dataset into a single dataset.
 
-1. Merging the training and the test sets to create one data set
+### 1. Merging the training and the test sets to create one data set
 
 This is done by looping over the different datasets and concatenating the 3 datasets:
 * *activities*, read from the y_{test|train}.txt files
@@ -24,7 +24,7 @@ The concatenation of "test" and "train" datasets (`activities`, `subjects` and `
 
 As we need to perform specific operations on `activities` and `measures` in the next steps, we choose not to build a single data frame yet and continue working on data frames seperately.
 
-2. Extracting only the measurements on the mean and standard deviation for each measurement.
+### 2. Extracting only the measurements on the mean and standard deviation for each measurement.
 
 We want to select only the features corresponding to mean and standard deviation measures.
 To do so, we work with the `measures` data frame and as a first step, we want to set the column labels based on the content of the file *features.txt* which lists all the features in the order in which they appear on the rows of `measures`.
@@ -49,7 +49,7 @@ Note that we need to match the opening parenthesis as we don't want the "meanFre
 
 At that point we still have 3 data frames (`activities`, `subjects` and `measures`). `measures` now only contains means and standard deviations and is labelled according to feature names from *features.txt* file. 
 
-3. Uses descriptive activity names to name the activities in the data set
+### 3. Uses descriptive activity names to name the activities in the data set
 
 The `activities` data frame contains a list of identifiers corresponding to the type of activity identified for each record. The file *activity_labels.txt* associates labels to those identifiers. As such, we use `merge` to join `activities` and `activity_labels` based on their common id.
 
@@ -57,7 +57,7 @@ After the merge, we can drop the activity identifier which is no longer of any u
 
 Now that all 3 data sets are clean and their columns correctly labelled, we combine them using `cbind` to build the result data frame.
 
-4. Appropriately labels the data set with descriptive variable names.
+### 4. Appropriately labels the data set with descriptive variable names.
 
 The column names for the variables are still in the format from the *features.txt* file, such as `tBodyAcc-mean()-X`. We want to make it a little bit more descriptive. We use several `gsub` on the column names to reformat them, turning `tBodyAcc-mean()-X` into `Body.Acc.mean.X`.
 
@@ -143,7 +143,7 @@ Where:
 
 Next, we want to use the tidy dataset to build a compute some statistics on subject's activities. 
 
-5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+### 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 To answer this question, we create a pivot table so that we can use the data from the `subject.id` and `activity.name` columns as dimensions instead of measures.
 
